@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import NotesBundle from './api/notes.bundle';
+import NotesBundle from './api/notes/notes.bundle';
 
 @Module({
   imports: [
