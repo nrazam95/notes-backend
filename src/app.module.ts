@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import NotesBundle from './api/notes/notes.bundle';
+import { UsersModule } from './api/users/users.module';
+import { AuthModule } from './api/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import NotesBundle from './api/notes/notes.bundle';
       synchronize: true,
     }),
     ...NotesBundle,
+    UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
