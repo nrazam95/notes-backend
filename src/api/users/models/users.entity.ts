@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { NotesEntity } from 'src/api/notes/models/notes.entity';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { EntityWithSequence, NextVal } from 'typeorm-sequence';
 
 @Entity('users')
@@ -32,4 +39,10 @@ export class UsersEntity extends EntityWithSequence {
   @ApiProperty()
   @Column({ name: 'updated_at', type: 'timestamp', nullable: false })
   updatedAt: Date;
+
+  @OneToMany(() => NotesEntity, (note) => note.user, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  notes: NotesEntity[];
 }

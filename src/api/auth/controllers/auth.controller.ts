@@ -9,7 +9,7 @@ import { AuthService } from '../services/auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/login')
+  @Post('signup')
   register(@Req() req: Request): Observable<any> {
     const payload = {
       username: req.query.username,
@@ -17,5 +17,14 @@ export class AuthController {
       email: req.query.email,
     };
     return from(this.authService.register(payload));
+  }
+
+  @Post('login')
+  login(@Req() req: Request): Observable<any> {
+    const payload = {
+      username: req.query.username,
+      password: req.query.password,
+    };
+    return from(this.authService.login(payload));
   }
 }

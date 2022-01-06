@@ -20,4 +20,14 @@ export class UsersService {
     userEntity.updatedAt = new Date();
     return from(this.usersRepository.save(userEntity));
   }
+
+  findByUsername(username: any): Observable<UsersEntity> {
+    return from(
+      this.usersRepository
+        .createQueryBuilder('user')
+        .where('user.username = :username', { username })
+        .leftJoinAndSelect('user.notes', 'notes')
+        .getOne(),
+    );
+  }
 }

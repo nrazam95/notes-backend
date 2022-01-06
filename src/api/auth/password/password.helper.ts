@@ -3,16 +3,14 @@ import { randomBytes, scrypt } from 'crypto';
 export class PasswordHelper {
   public async hashPassword(password: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      randomBytes(64, (err, salt) => {
+      const salt = randomBytes(16).toString('hex');
+      scrypt(password, salt, 64, (err, buffer) => {
         if (err) {
           reject(err);
         }
-        scrypt(password, salt, 64, (err, buffer) => {
-          if (err) {
-            reject(err);
-          }
-          resolve(`${buffer.toString('hex')}.${salt.toString('hex')}`);
-        });
+
+        const hash = buffer.toString('hex') + '.' + salt;
+        resolve(hash);
       });
     });
   }
@@ -27,7 +25,12 @@ export class PasswordHelper {
         if (err) {
           reject(err);
         }
-        resolve(buffer.toString('hex') === hashedPassword);
+
+        if (buffer.toString('hex') === hashedPassword) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
       });
     });
   }
