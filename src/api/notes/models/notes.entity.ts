@@ -4,6 +4,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -39,4 +40,10 @@ export class NotesEntity extends EntityWithSequence {
   @ManyToOne(() => UsersEntity, (user) => user.notes, { eager: true })
   @JoinColumn({ name: 'user_id' })
   user: UsersEntity;
+
+  @ManyToMany(() => UsersEntity, (user) => user.likedNotes, {
+    eager: true,
+  })
+  @JoinColumn({ name: 'user_id' })
+  likedUsers: UsersEntity[];
 }

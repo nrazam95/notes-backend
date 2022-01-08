@@ -12,8 +12,11 @@ export class NotesService {
     private readonly notesRepository: Repository<NotesEntity>,
   ) {}
 
-  getNotes() {
-    return 'Notes';
+  async getNotes(username) {
+    const userInfo = getRepository(UsersEntity).findOne({ username });
+    return from(
+      this.notesRepository.find({ user_id: ((await userInfo) as any).id }),
+    );
   }
 
   async createNote(
@@ -34,5 +37,15 @@ export class NotesService {
 
   deleteNote(id: number): Observable<DeleteResult> {
     return from(this.notesRepository.delete(id));
+  }
+
+  async likeNote(
+    id: number,
+    username: string,
+  ): Promise<Observable<NotesEntity>> {
+    const userInfo = getRepository(UsersEntity).findOne({ username });
+    const note = await this.notesRepository.findOne(id);
+    note.likedUsers.push((await userInfo) as any);
+    return from(this.notesRepository.save(note));
   }
 }

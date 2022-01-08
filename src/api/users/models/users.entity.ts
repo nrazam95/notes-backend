@@ -1,8 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+// import { LikesEntity } from 'src/api/like/models/likes.entity';
 import { NotesEntity } from 'src/api/notes/models/notes.entity';
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
@@ -45,4 +48,15 @@ export class UsersEntity extends EntityWithSequence {
     onUpdate: 'CASCADE',
   })
   notes: NotesEntity[];
+
+  @ManyToMany(() => NotesEntity, (note) => note.likedUsers, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinTable({
+    name: 'likes',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'note_id', referencedColumnName: 'id' },
+  })
+  likedNotes: NotesEntity[];
 }

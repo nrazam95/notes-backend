@@ -27,6 +27,7 @@ export class UsersService {
         .createQueryBuilder('user')
         .where('user.username = :username', { username })
         .leftJoinAndSelect('user.notes', 'notes')
+        .leftJoinAndSelect('user.likedNotes', 'likedNotes')
         .getOne(),
     );
   }
